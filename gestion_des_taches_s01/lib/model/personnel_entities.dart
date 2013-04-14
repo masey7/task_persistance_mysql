@@ -2,31 +2,57 @@ part of dartlero_category_tache;
 
 class Personnel extends ConceptEntity<Personnel> {
   
-  String departement;
+  String _departement;
 
-  Personnel newEntity() => new Personnel();
+  Personnel newEntity() => new Personnel();  
+  
+  String get departement => _departement;
 
+  set departement(String departement) {
+    _departement = departement;
+    
+    ConnectionPool pool = getConnectionPool();
+    pool.query(
+        'update personnel '
+        'SET '
+        'DEPARTEMENT = \'${this.departement}\' '
+        'where '
+        '(NOM_COMPLET = \'${this.code}\')'
+    ).then((x) {
+      print(
+          'Le membre du personnel a été modifié: '
+          'Nom: ${this.code}, '
+          'departement: ${this.departement}, '
+      );
+    }, onError:(e) => print(
+        'Le membre du personnel n\'a pas été modifié'
+        'Une erreur a été rencontré : ${e} -- '
+        'Nom: ${this.code}, '
+        'departement: ${this.departement}, '
+    ));
+  }
+  
   String toString() {
     return '    {\n '
            '      ${super.toString()}, \n '
-           '      departement: ${departement}\n'         
+           '      departement: ${_departement}\n'         
            '    }\n';
   }
 
   Map<String, Object> toJson() {
     Map<String, Object> entityMap = super.toJson();
-    entityMap['departement'] = departement;
+    entityMap['departement'] = _departement;
     return entityMap;
   }
        
               
   fromJson(Map<String, Object> entityMap) {
     super.fromJson(entityMap);
-    departement = entityMap['departement'];
+    _departement = entityMap['departement'];
   }
 
   bool get onProgramming =>
-      departement.contains('programming') ? true : false;
+      _departement.contains('programming') ? true : false;
 
 }
 
@@ -36,40 +62,7 @@ class Personnels extends ConceptEntities<Personnel> {
   Personnel newEntity() => new Personnel();
   
 
-  bool update(Personnel personnel, {bool boolUpdate:true}) {
-    if (super.update(personnel)) {
-        if (boolUpdate) {
-          ConnectionPool pool = getConnectionPool();
-          pool.query(
-              'update personnel '
-              'SET '
-              '(DEPARTEMENT = \'${personnel.departement}\') '
-              'where'
-              '(NOM_COMPLET = \'${personnel.code}\')'
-          ).then((x) {
-            print(
-                'Le membre du personnel a été modifié: '
-                'Nom: ${personnel.code}, '
-                'departement: ${personnel.departement}, '
-            );
-          }, onError:(e) => print(
-              'Le membre du personnel n\'a pas été modifié'
-              'Une erreur a été rencontré : ${e} -- '
-              'Nom: ${personnel.code}, '
-              'departement: ${personnel.departement}, '
-          ));
-        }
-      return true;
-    } else {
-      print(
-          'Le membre du personnel n\'a pas été modifié: '
-          'Nom: ${personnel.code}, '
-          'departement: ${personnel.departement}, '
-      );
-      return false;
-    }
-  }
-  
+
   
   
   

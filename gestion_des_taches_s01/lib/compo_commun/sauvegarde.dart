@@ -7,7 +7,6 @@ import 'package:sqljocky/sqljocky.dart';
 import 'package:sqljocky/utils.dart';
 import 'package:/options_file/options_file.dart';
 
-
 String getConnectionOptionFileName(){
   return 'lib/compo_commun/connection.options';
 }
@@ -23,14 +22,4 @@ ConnectionPool getConnectionPool() {
   String host = options.getString('host', 'localhost');
   return new ConnectionPool(
       host: host, port: port, user: user, password: password, db: db);
-}
-
-sauvegarder(categories) {
-  window.localStorage['dartlero_categorie_taches'] =
-      stringify(categories.toJson());
-}
-
-sauvegarderPersonnel(personnels) {
-  window.localStorage['dartlero_personnels'] =
-      stringify(personnels.toJson());
 }

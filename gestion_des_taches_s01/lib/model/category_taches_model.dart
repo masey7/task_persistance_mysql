@@ -20,6 +20,8 @@ class CategoryTachesModel extends ConceptModel {
   Personnels get personnels => getEntry(personnel);
   
 
+
+  
   
   init() {
     
@@ -27,6 +29,7 @@ class CategoryTachesModel extends ConceptModel {
     var personnel1 = new Personnel();    
     personnel1.code = 'Marie';
     personnel1.departement = 'comptabilite';
+    
     personnels.add(personnel1);    
     
     var personnel2 = new Personnel();    
@@ -34,11 +37,23 @@ class CategoryTachesModel extends ConceptModel {
     personnel2.departement = 'SIO';
     personnels.add(personnel2);     
     personnels.remove(personnel1);
-    
-    personnel2.departement = 'comptabilité';
-    personnels.update(personnel2);
 
+    personnel2.departement = 'comptabilite';
+    print(personnel2.departement);
+ 
     
+    
+    var webCategory = new Category();
+    webCategory.code = 'Etudes';
+    webCategory.description = 'Relatif a mon MBA';
+    categories.add(webCategory);    
+    var dartCategory = new Category();
+    dartCategory.code = 'Travail';
+    dartCategory.description = 'Relatif a mon emploi';
+    categories.add(dartCategory);    
+    
+    categories.remove(webCategory);
+    dartCategory.description = "Relatif a mon emplois au Finances";
     
 //    var travailCoursArchitecture = new Tache();
 //    travailCoursArchitecture.code = 'Travail de Session';
@@ -48,10 +63,8 @@ class CategoryTachesModel extends ConceptModel {
 //    travailCoursArchitecture.listeDePersonel.add(personnel1);
 //    travailCoursArchitecture.listeDePersonel.add(personnel2);   
     
-//    var webCategory = new Category();
-//    webCategory.code = 'Etudes';
-//    webCategory.description = 'Relatif à mon MBA';
-//    categories.add(webCategory);
+
+
 //
 //    var webCategoryTaches = webCategory.taches;
 
@@ -66,10 +79,8 @@ class CategoryTachesModel extends ConceptModel {
 //    examensArchitecture.listeDePersonel.add(personnel2);     
 //    webCategoryTaches.add(examensArchitecture);
 //
-//    var dartCategory = new Category();
-//    dartCategory.code = 'Travail';
-//    dartCategory.description = 'Relatif à mon emploi';
-//    categories.add(dartCategory);
+
+
 //
 //    var tacheDart3 = dartCategory.taches;
 //    var developperApplicationTachesCategory = new Tache();
