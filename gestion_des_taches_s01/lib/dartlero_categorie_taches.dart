@@ -6,6 +6,7 @@ import 'package:sqljocky/utils.dart';
 import 'package:/options_file/options_file.dart';
 import 'dart:async';
 import 'dart:json';
+import 'dart:utf';
 import 'compo_commun/sauvegarde.dart';
 
 part 'model/category_entities.dart';

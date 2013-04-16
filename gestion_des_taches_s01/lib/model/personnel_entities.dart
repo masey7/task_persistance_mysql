@@ -15,9 +15,9 @@ class Personnel extends ConceptEntity<Personnel> {
     pool.query(
         'update personnel '
         'SET '
-        'DEPARTEMENT = \'${this.departement}\' '
+        'DEPARTEMENT = \'${codepointsToString(encodeUtf8(this.departement))}\' '
         'where '
-        '(NOM_COMPLET = \'${this.code}\')'
+        '(NOM_COMPLET = \'${codepointsToString(encodeUtf8(this.code))}\')'
     ).then((x) {
       print(
           'Le membre du personnel a été modifié: '
@@ -73,7 +73,7 @@ class Personnels extends ConceptEntities<Personnel> {
           pool.query(
               'delete from personnel '
               'where (personnel.NOM_COMPLET = '
-              '\'${personnel.code}\')'
+              '\'${codepointsToString(encodeUtf8(personnel.code))}\')'
           ).then((x) {
             print(
                 'Le membre du personnel a été suprimé: '
@@ -106,7 +106,8 @@ class Personnels extends ConceptEntities<Personnel> {
               'insert into personnel '
               '(NOM_COMPLET, DEPARTEMENT)'
               'values'
-              '("${personnel.code}", "${personnel.departement}")'
+              '("${codepointsToString(encodeUtf8(personnel.code))}", '
+              '"${codepointsToString(encodeUtf8(personnel.departement))}")'
           ).then((x) {
             print(
                 'Le membre du personnel a été ajouté: '

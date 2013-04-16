@@ -3,10 +3,33 @@ part of dartlero_category_tache;
 class Category extends ConceptEntity<Category> {
 
   String _description;
+  int _id;
   Taches taches = new Taches();
 
   Category newEntity() => new Category();
   
+  
+  set id(int id) {
+    _id = id;
+    }
+
+  int get id {
+    ConnectionPool pool = getConnectionPool();
+    pool.prepare('select categorie.idCategorie '
+        'from categorie '
+        'where categorie.Nom = \'${codepointsToString(encodeUtf8(this.code))}\')').then((query) {
+          return = query.execute();          
+    }).then((result) {
+    pool.query('select categorie.idCategorie '
+        'from categorie '
+        'where categorie.Nom = \'${codepointsToString(encodeUtf8(this.code))}\')').then((result) {
+          id = result[0];
+      completer.complete(null);
+    });
+        }
+  }
+          
+       
 
   String get description => _description;
 
@@ -69,6 +92,16 @@ class Categories extends ConceptEntities<Category> {
     if (super.remove(category)) {
         if (BoolBDRemove) {
           ConnectionPool pool = getConnectionPool();
+          
+          //suprimer les occurences personneTaches de cette catégorie
+          //suprimer les taches de cette catégorie
+          
+         // if()
+          //category.taches.remove(category, BoolBDRemove)(category.taches.)
+          //get tache ID
+          
+          //'delete from personnelTache'
+          
           pool.query(
               'delete from categorie '
               'where (categorie.Nom = '
