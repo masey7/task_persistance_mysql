@@ -3,46 +3,25 @@ part of dartlero_category_tache;
 class Category extends ConceptEntity<Category> {
 
   String _description;
-  int _id;
   Taches taches = new Taches();
 
   Category newEntity() => new Category();
-  
-  
-  set id(int id) {
-    _id = id;
-    }
-
-  int get id {
-    ConnectionPool pool = getConnectionPool();
-    pool.prepare('select categorie.idCategorie '
-        'from categorie '
-        'where categorie.Nom = \'${codepointsToString(encodeUtf8(this.code))}\')').then((query) {
-          return = query.execute();          
-    }).then((result) {
-    pool.query('select categorie.idCategorie '
-        'from categorie '
-        'where categorie.Nom = \'${codepointsToString(encodeUtf8(this.code))}\')').then((result) {
-          id = result[0];
-      completer.complete(null);
-    });
-        }
-  }
-          
-       
 
   String get description => _description;
 
   set description(String description) {
+    var oldDescription = _description;
     _description = description;
     
+    if(oldDescription != null)
+    {
     ConnectionPool pool = getConnectionPool();
     pool.query(
         'update categorie '
         'SET '
-        'Description = \'${this.description}\' '
+        'Description = \'${codepointsToString(encodeUtf8(this.description))}\' '
         'where '
-        '(Nom = \'${this.code}\')'
+        '(Nom = \'${codepointsToString(encodeUtf8(this.code))}\')'
     ).then((x) {
       print(
           'La description de la catégorie a été modifié: '
@@ -55,7 +34,8 @@ class Category extends ConceptEntity<Category> {
         'Nom: ${this.code}, '
         'description: ${this.description}, '
     ));   
-  }  
+    }
+    }  
   
   
   String toString() {
@@ -105,7 +85,7 @@ class Categories extends ConceptEntities<Category> {
           pool.query(
               'delete from categorie '
               'where (categorie.Nom = '
-              '\'${category.code}\')'
+              '\'${codepointsToString(encodeUtf8(category.code))}\')'
           ).then((x) {
             print(
                 'La catégorie a été suprimé: '
@@ -138,7 +118,8 @@ class Categories extends ConceptEntities<Category> {
               'insert into categorie '
               '(Nom, Description)'
               'values'
-              '("${category.code}", "${category.description}")'
+              '("${codepointsToString(encodeUtf8(category.code))}", '
+              '"${codepointsToString(encodeUtf8(category.description))}")'
           ).then((x) {
             print(
                 'La catégorie a été ajouté à la BD: '

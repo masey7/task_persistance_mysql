@@ -2,11 +2,75 @@ part of dartlero_category_tache;
 
 class Tache extends ConceptEntity<Tache> {
   
-  String description;
-  DateTime date;
+  String _description;
+  DateTime _date;
   Personnels listeDePersonel = new Personnels();
   Category category;
 
+  set description(description){
+    
+    var oldDescription = _description;
+    _description = description;
+    
+    if(oldDescription != null)
+    {
+    ConnectionPool pool = getConnectionPool();
+    pool.query(
+        'update tache '
+        'SET '
+        'Description = \'${codepointsToString(encodeUtf8(this.description))}\' '
+        'where '
+        '(NomTache = \'${codepointsToString(encodeUtf8(this.code))}\')'
+    ).then((x) {
+      print(
+          'La description de la tache a été modifié: '
+          'Nom: ${this.code}, '
+          'description: ${this.description}, '
+      );
+    }, onError:(e) => print(
+        'La description de la tache n\'a pas été modifié'
+        'Une erreur a été rencontré : ${e} -- '
+        'Nom: ${this.code}, '
+        'description: ${this.description}, '
+    ));   
+    }    
+    
+  }
+  
+  String get description => _description;
+  
+  set date(date){
+    
+    var oldDate = _date;    
+    _date = date;
+    if(oldDate != null)
+    {
+    ConnectionPool pool = getConnectionPool();
+    pool.query(
+        'update tache '
+        'SET '
+        'Date = \'${this.getDateWithZero()}\' '
+        'where '
+        '(NomTache = \'${codepointsToString(encodeUtf8(this.code))}\')'
+    ).then((x) {
+      print(
+          'La date de la tache a été modifiée: '
+          'Nom: ${this.code}, '
+          'Date: ${this.getDateWithZero()}, '
+      );
+    }, onError:(e) => print(
+        'La date de la tache n\'a pas été modifiée'
+        'Une erreur a été rencontré : ${e} -- '
+        'Nom: ${this.code}, '
+        'Date: ${this.getDateWithZero()}, '
+    ));   
+    }    
+    
+  }
+  
+  DateTime get date => _date;
+  
+  
   
   Tache newEntity() => new Tache();
 
@@ -87,66 +151,68 @@ class Taches extends ConceptEntities<Tache> {
   Tache newEntity() => new Tache();
   Category category;
 
-  bool remove(Tache tache, {bool BoolBDRemove:true}) {
+  bool remove(Tache tache, {Category category, bool BoolBDRemove:true}) {
     if (super.remove(tache)) {
-        if (BoolBDRemove) {
+        if (BoolBDRemove && ?category) {
           ConnectionPool pool = getConnectionPool();
           pool.query(
               'delete from tache '
-              'where (categorie.Nom = '
-              '\'${category.code}\')'
+              'where (tache.NomTache = \'${codepointsToString(encodeUtf8(tache.code))}\' and '
+              'tache.NomCategory = \'${codepointsToString(encodeUtf8(category.code))}\')'
           ).then((x) {
             print(
-                'La catégorie a été suprimé: '
-                'Nom: ${category.code}, '
-                'description: ${category.description}, '
+                'La tache a été suprimé: '
+                'Nom: ${tache.code}, '
+                'description: ${tache.description}, '
             );
           }, onError:(e) => print(
-              'La catégorie n\'a pas été supprimé'
+              'La tache n\'a pas été supprimé'
               'Une erreur a été rencontré : ${e} -- '
-              'Nom: ${category.code}, '
-              'description: ${category.description}, '
+              'Nom: ${tache.code}, '
+              'description: ${tache.description}, '
           ));
         }
       return true;
     } else {
       print(
-          'La catégorie n\'a pas été suprimé: '
-          'Nom: ${category.code}, '
-          'departement: ${category.description}, '
+          'La tache n\'a pas été suprimé: '
+          'Nom: ${tache.code}, '
+          'description: ${tache.description}, '
       );
       return false;
     }
   }
   
-  bool add(Tache tache, {bool BoolBDinsert:true}) {
-    if (super.add(category)) {
-        if (BoolBDinsert) {
+  bool add(Tache tache, {Category category, bool BoolBDinsert:true}) {
+    if (super.add(tache)) {
+        if (BoolBDinsert && ?category) {
           ConnectionPool pool = getConnectionPool();
           pool.query(
               'insert into tache '
-              '(Nom, Description)'
+              '(NomTache, NomCategory, Description, Date)'
               'values'
-              '("${category.code}", "${category.description}")'
+              '("${codepointsToString(encodeUtf8(tache.code))}", "${codepointsToString(encodeUtf8(category.code))}", "${codepointsToString(encodeUtf8(tache.description))}",'
+              ' "${tache.getDateWithZero()}")'
           ).then((x) {
             print(
-                'La catégorie a été ajouté à la BD: '
-                'Nom: ${category.code}, '
-                'Description: ${category.description}, '
+                'La tache a été ajouté à la BD: '
+                'Nom: ${tache.code}, '
+                'Description: ${tache.description}, '
+                'Date : ${tache.getDateWithZero()}'
             );
           }, onError:(e) => print(
-              'La catégorie n\'a pas été ajouté à la BD '
+              'La tache n\'a pas été ajouté à la BD '
               'Une erreur a été rencontré : ${e} -- '
-              'Nom: ${category.code}, '
-              'Description: ${category.description}, '
+              'Nom: ${tache.code}, '
+              'Description: ${tache.description}, '
           ));
         }
       return true;
     } else {
       print(
-          'La catégorie n\'a pas été ajoutée: '
-          'Nom: ${category.code}, '
-          'Description: ${category.description}, '
+          'La tache n\'a pas été ajoutée: '
+          'Nom: ${tache.code}, '
+          'Description: ${tache.description}, '
       );
       return false;
     }
