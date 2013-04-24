@@ -1,18 +1,18 @@
 part of dartlero_category_tache;
 
 class Personnel extends ConceptEntity<Personnel> {
-  
-  String _departement;
-  
 
-  Personnel newEntity() => new Personnel();  
-  
+  String _departement;
+
+
+  Personnel newEntity() => new Personnel();
+
   String get departement => _departement;
 
   set departement(String departement) {
     var oldDepartement = _departement;
     _departement = departement;
-    
+
     if (oldDepartement != null){
       ConnectionPool pool = getConnectionPool();
       pool.query(
@@ -35,11 +35,11 @@ class Personnel extends ConceptEntity<Personnel> {
       ));
     }
    }
-  
+
   String toString() {
     return '    {\n '
            '      ${super.toString()}, \n '
-           '      departement: ${_departement}\n'         
+           '      departement: ${_departement}\n'
            '    }\n';
   }
 
@@ -48,8 +48,8 @@ class Personnel extends ConceptEntity<Personnel> {
     entityMap['departement'] = _departement;
     return entityMap;
   }
-       
-              
+
+
   fromJson(Map<String, Object> entityMap) {
     super.fromJson(entityMap);
     _departement = entityMap['departement'];
@@ -64,17 +64,17 @@ class Personnels extends ConceptEntities<Personnel> {
 
   Personnels newEntities() => new Personnels();
   Personnel newEntity() => new Personnel();
-  
 
 
-  
-  
-  
+
+
+
+
   bool remove(Personnel personnel, {Tache tache, bool BoolRemove:true}) {
     if (super.remove(personnel)) {
         if (BoolRemove) {
           ConnectionPool pool = getConnectionPool();
-          
+
           if(BoolRemove && ?tache){
             pool.query(
                 'delete from personneltache '
@@ -85,15 +85,14 @@ class Personnels extends ConceptEntities<Personnel> {
                   'Le membre du personnelTache a été supprimé: '
                   'Nom: ${personnel.code}, '
                   'tache: ${tache.code}, '
-                  return true;
-                  
-              );}, onError:(e) => print(
+                );
+              }, onError:(e) => print(
                   'Le membre du personnelTache n\'a pas été suprimé'
                   'Une erreur a été rencontré : ${e} -- '
                   'Nom: ${personnel.code}, '
                   'tache: ${tache.code}, ')
             );
-          }  
+          }
 
           pool.query(
               'delete from personnel '
@@ -103,7 +102,7 @@ class Personnels extends ConceptEntities<Personnel> {
             print(
                 'Le membre du personnel a été suprimé: '
                 'Nom: ${personnel.code}, '
-                'departement: ${personnel.departement}, '                
+                'departement: ${personnel.departement}, '
             );
           }, onError:(e) => print(
               'Le membre du personnel n\'a pas été supprimé'
@@ -122,11 +121,11 @@ class Personnels extends ConceptEntities<Personnel> {
       return false;
     }
   }
-  
+
   bool add(Personnel personnel, {Tache tache, bool insert:true}) {
     if (super.add(personnel)) {
 
-      
+
       if (insert) {
           ConnectionPool pool = getConnectionPool();
           pool.query(
@@ -152,15 +151,15 @@ class Personnels extends ConceptEntities<Personnel> {
                         'Le membre du personnelTache a été ajouté: '
                         'Nom: ${personnel.code}, '
                         'tache: ${tache.code}, '
-                    
+
                   );}, onError:(e) => print(
                       'Le membre du personnelTache n\'a pas été ajouté'
                       'Une erreur a été rencontré : ${e} -- '
                       'Nom: ${personnel.code}, '
                       'tache: ${tache.code}, ')
                   );
-                }  
-                
+                }
+
             ;
           }, onError:(e) => print(
               'Le membre du personnel n\'a pas été ajouté'
@@ -179,6 +178,6 @@ class Personnels extends ConceptEntities<Personnel> {
       return false;
     }
   }
-  
-  
+
+
 }

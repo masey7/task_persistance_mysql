@@ -1,11 +1,11 @@
-import '../packages/gestion_des_taches_s01/dartlero_categorie_taches.dart';
+import 'package:gestion_des_taches_s01/dartlero_categorie_taches.dart';
 
 void main() {
-  
-  
+
+
   var categoryTachesModel = new CategoryTachesModel();
-  
+
   categoryTachesModel.loadFromBD();
-  
-  
+
+
 }

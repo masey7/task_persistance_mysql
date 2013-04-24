@@ -1,8 +1,8 @@
 # create connection.options to define how the integration tests connect
-user=test1
-password=test
+user=root
+password=dr
 #defaults to 3306
 port=3306
-db=mydb
+db=test
 #defaults to localhost
 host=localhost
